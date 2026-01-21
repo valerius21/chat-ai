@@ -1,23 +1,23 @@
-# We are using the node base image
-FROM node:latest
-
-# Configure config location
-ENV CONFIG_LOCATION=/run/secrets/back
+# We are using the bun base image
+FROM oven/bun:latest
 
 # Create a directory for your application
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json files to your app directory
-COPY package*.json ./
+# Copy bun.lockb and package.json files to your app directory
+COPY package.json package-lock.json bun.lockb ./
 
 # Install application dependencies
-RUN npm install
+RUN bun install
 
 # Copy the rest of the application to the app directory
 COPY . .
 
 # Expose the port app runs on
-EXPOSE 7230
+EXPOSE 8081
+
+# FIXME: whats the purpose of this port?
+EXPOSE 7230 
 
 # Run the application
-CMD [ "npm", "start"]
+CMD [ "bun", "service.ts"]
