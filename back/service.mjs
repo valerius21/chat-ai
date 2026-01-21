@@ -2,7 +2,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import fetch from "node-fetch";          
+import fetch from "node-fetch";
 import fileUpload from "express-fileupload";
 import FormData from "form-data";
 import fs from "fs";
@@ -205,7 +205,7 @@ app.post("/chat/completions", async (req, res) => {
       temperature: temperature,
       top_p: top_p,
       stream: stream,
-      stream_options: stream ? {include_usage: true } : null,
+      stream_options: stream ? { include_usage: true } : null,
       timeout: timeout,
     }
 
@@ -227,38 +227,38 @@ app.post("/chat/completions", async (req, res) => {
         params.tools = [];
         for (const tool of tools) {
           if (tool.type === "web_search_preview" || tool.type === "web_search") {
-            params.tools.push({type: "web_search_preview"});
+            params.tools.push({ type: "web_search_preview" });
           }
           if (tool.type === "fetch_url") {
-            params.tools.push({type: "fetch_url"});
+            params.tools.push({ type: "fetch_url" });
           }
           if (tool.type === "image_generation") {
-            params.tools.push({type: "image_generation"});
+            params.tools.push({ type: "image_generation" });
           }
           if (tool.type === "video_generation") {
-            params.tools.push({type: "video_create"});
+            params.tools.push({ type: "video_create" });
           }
           if (tool.type === "image_modify" || tool.type === "image_modification") {
-            params.tools.push({type: "image_modify"});
+            params.tools.push({ type: "image_modify" });
           }
           if (tool.type === "audio_generation") {
-            params.tools.push({type: "audio_generation"});
+            params.tools.push({ type: "audio_generation" });
           }
           if (tool.type === "audio_transcription") {
-            params.tools.push({type: "audio_transcription"});
+            params.tools.push({ type: "audio_transcription" });
           }
           if (tool.type === "runRscript") {
-            params.tools.push({type: "runRscript"});
+            params.tools.push({ type: "runRscript" });
           }
         }
       }
     }
-    
-    const openai = new OpenAI({baseURL : apiEndpoint, apiKey: apiKey ? apiKey : inference_id});
+
+    const openai = new OpenAI({ baseURL: apiEndpoint, apiKey: apiKey ? apiKey : inference_id });
 
     // Temporary workaround as middleware doesn't support timeout yet
     if (params.arcana || params.model.includes("rag") || params.model.includes("sauerkraut")) delete params.timeout;
-    
+
     // Build headers object
     const headers = {
       "inference-service": inference_service,
@@ -273,7 +273,7 @@ app.post("/chat/completions", async (req, res) => {
 
     // Get chat completion response
     const response = await openai.chat.completions.create(params, {
-        headers
+      headers
     }).asResponse();
 
     // Pass through headers (optional but recommended)
@@ -307,16 +307,16 @@ app.post("/chat/completions", async (req, res) => {
       // Well-formed error, return
       if (err?.status && err?.error) {
         return res
-        .status(err?.status || 500)
-        .json({
-          error: err?.error || "An internal server error occurred",
-         });
+          .status(err?.status || 500)
+          .json({
+            error: err?.error || "An internal server error occurred",
+          });
       }
       // Couldn't extract error message, so try without openai library
       const response = await fetch(apiEndpoint + "/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${ apiKey ? apiKey : inference_id }`,
+          "Authorization": `Bearer ${apiKey ? apiKey : inference_id}`,
           "Content-Type": "application/json",
           "inference-service": inference_service,
           "inference-portal": serviceName,
@@ -336,7 +336,7 @@ app.post("/chat/completions", async (req, res) => {
           msg = match[1];
           console.log("Extracted message:", msg);
         }
-      } catch {}
+      } catch { }
       // Return message as best as possible
       return res
         .status(status || err?.status || 500)
