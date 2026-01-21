@@ -1,13 +1,13 @@
 // Bun-native imports
 import OpenAI from "openai";
-import { Config } from './lib/config'
+import { Env } from './lib/env'
 
 const {
   API_ENDPOINT: apiEndpoint,
   API_KEY: apiKey,
   PORT: port,
   SERVCE_NAME: serviceName
-} = Config
+} = Env
 
 // CORS headers
 const corsHeaders = {
