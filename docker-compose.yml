@@ -8,6 +8,8 @@ services:
       - /usr/src/app/node_modules
     secrets:
       - front
+    env_file:
+        - .env.front
     restart: on-failure
 
   back:
@@ -19,6 +21,8 @@ services:
       - /usr/src/app/node_modules
     secrets:
       - back
+    env_file:
+      - .env.back
     restart: on-failure
 
 secrets:
